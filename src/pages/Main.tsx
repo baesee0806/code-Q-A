@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -23,7 +22,6 @@ const Container = styled.main`
   justify-content: center;
   width: 100vw;
   height: 100vh;
-  background-color: #fef6e0;
 `;
 const Title = styled.h1`
   position: absolute;
@@ -33,6 +31,8 @@ const Title = styled.h1`
   transform: translate(-50%, -50%);
   font-size: 3rem;
   color: #482308;
+  border-radius: 10px;
+  padding: 1rem;
 `;
 const Section = styled.section`
   width: 100%;
