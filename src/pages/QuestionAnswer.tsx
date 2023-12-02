@@ -1,25 +1,40 @@
 import styled from "styled-components";
 
 const QuestionAnswer = () => {
+  const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   return (
     <Container>
       <SearchContainer>
         <SearchIcon>🔍</SearchIcon>
         <Search type="text" />
       </SearchContainer>
+      <OptionSection>
+        <OptionContainer>
+          <OptionSelect>
+            <option value="">최신순</option>
+          </OptionSelect>
+          <OptionSelect>
+            <option value="">Javascript</option>
+          </OptionSelect>
+          <OptionSelect>
+            <option value="">채택 여부</option>
+          </OptionSelect>
+        </OptionContainer>
+      </OptionSection>
       <ContentSection>
-        <Card>
-          <CardImage
-            src="https://images.velog.io/images/hang_kem_0531/post/05903636-878d-4e75-bf8b-aaddfcecbcce/js-logo.png"
-            alt="card img"
-          />
-          <CardInfo>
-            <CardTitle>{"title"}</CardTitle>
-            <CardAuthor>{"author"}</CardAuthor>
-            <CardDate>{"date"}</CardDate>
-            <CardAnswer>{"answer"}</CardAnswer>
-          </CardInfo>
-        </Card>
+        {data.map((item, index) => {
+          return (
+            <Card key={index}>
+              <CardImage src="https://picsum.photos/300/300" />
+              <CardInfo>
+                <CardTitle>제목</CardTitle>
+                <CardAuthor>작성자</CardAuthor>
+                <CardDate>작성일</CardDate>
+                <CardAnswer>답변수</CardAnswer>
+              </CardInfo>
+            </Card>
+          );
+        })}
       </ContentSection>
     </Container>
   );
@@ -29,6 +44,7 @@ const Container = styled.main`
   width: 100vw;
   height: 100vh;
 `;
+// 검색
 const SearchContainer = styled.div`
   height: 30%;
   display: flex;
@@ -49,10 +65,46 @@ const Search = styled.input`
   border-radius: 30px;
   font-size: 2rem;
 `;
+
+// card 정렬 option
+
+const OptionSection = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const OptionContainer = styled.div`
+  width: 80%;
+  height: 50px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const OptionSelect = styled.select`
+  width: 400px;
+  height: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background-color: #f5f5f5;
+  color: #444;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+// 질문 card
 const ContentSection = styled.section`
   width: 100%;
-  height: 70%;
-  padding: 30px;
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 `;
 
 const CardInfo = styled.div`
@@ -73,9 +125,11 @@ const Card = styled.div`
   position: relative;
   width: 300px;
   height: 300px;
-
+  margin: 0 50px 100px 80px;
   &:hover ${CardInfo} {
     display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
