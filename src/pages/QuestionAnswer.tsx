@@ -1,7 +1,17 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 const QuestionAnswer = () => {
   const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  const [a, setA] = useState(0);
+
+  const b = () => {
+    setA(a + 1);
+  };
+
+  console.log(a);
+
   return (
     <Container>
       <SearchContainer>
@@ -24,7 +34,7 @@ const QuestionAnswer = () => {
       <ContentSection>
         {data.map((item, index) => {
           return (
-            <Card key={index}>
+            <Card key={index} onClick={b}>
               <CardImage src="https://picsum.photos/300/300" />
               <CardInfo>
                 <CardTitle>제목</CardTitle>
