@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { IoHomeSharp } from "react-icons/io5";
 import { FaQuestionCircle } from "react-icons/fa";
 import { TfiWrite } from "react-icons/tfi";
-
+import { loginModalState } from "../recoil/atom/loginModalState";
+import { useSetRecoilState } from "recoil";
 function Nav() {
+  const loginState = useSetRecoilState(loginModalState);
   return (
     <Container>
       <NavLogoBox>
@@ -19,7 +21,13 @@ function Nav() {
         <NavItem to="/question/create">
           <TfiWrite />
         </NavItem>
-        <NavItem to="/login">로그인</NavItem>
+        <div
+          onClick={() => {
+            loginState(true);
+          }}
+        >
+          로그인
+        </div>
       </NavItemBox>
     </Container>
   );

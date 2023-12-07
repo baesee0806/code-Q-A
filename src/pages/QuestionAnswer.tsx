@@ -1,16 +1,38 @@
-import { useState } from "react";
 import styled from "styled-components";
+import { supabase } from "../supabase/configure";
+import Select from "react-select";
+// interface Datas {
+//   id: number;
+//   created_at: Date;
+//   user_id: string;
+//   title: string;
+//   content: string;
+//   language: string;
+//   importance: number;
+//   check: boolean;
+// }
 
 const QuestionAnswer = () => {
-  const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-  const [a, setA] = useState(0);
-
-  const b = () => {
-    setA(a + 1);
-  };
-
-  console.log(a);
+  const data1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
+  // const user = async () => {
+  //   const { data, error } = await supabase.auth.getUser();
+  //   console.log(data);
+  // };
+  // user();
+  // const d = async () => {
+  //   const { data: question, error } = await supabase
+  //     .from("question")
+  //     .select("*");
+  //   console.log(question);
+  // };
+  // useEffect(() => {
+  //   d();
+  // }, []);
 
   return (
     <Container>
@@ -20,21 +42,27 @@ const QuestionAnswer = () => {
       </SearchContainer>
       <OptionSection>
         <OptionContainer>
-          <OptionSelect>
-            <option value="">최신순</option>
-          </OptionSelect>
-          <OptionSelect>
-            <option value="">Javascript</option>
-          </OptionSelect>
-          <OptionSelect>
-            <option value="">채택 여부</option>
-          </OptionSelect>
+          <Selects
+            options={options}
+            defaultValue={options[0]}
+            isSearchable={false}
+          />
+          <Selects
+            options={options}
+            defaultValue={options[0]}
+            isSearchable={false}
+          />
+          <Selects
+            options={options}
+            defaultValue={options[0]}
+            isSearchable={false}
+          />
         </OptionContainer>
       </OptionSection>
       <ContentSection>
-        {data.map((item, index) => {
+        {data1.map((item, index) => {
           return (
-            <Card key={index} onClick={b}>
+            <Card key={index}>
               <CardImage src="https://picsum.photos/300/300" />
               <CardInfo>
                 <CardTitle>제목</CardTitle>
@@ -92,20 +120,9 @@ const OptionContainer = styled.div`
   align-items: center;
 `;
 
-const OptionSelect = styled.select`
-  width: 400px;
-  height: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  background-color: #f5f5f5;
-  color: #444;
-  font-size: 1rem;
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-  }
+const Selects = styled(Select)`
+  width: 300px;
+  height: 50px;
 `;
 
 // 질문 card
