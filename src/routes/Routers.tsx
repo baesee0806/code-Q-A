@@ -5,26 +5,37 @@ import QuestionAnswer from "../pages/QuestionAnswer";
 import My from "../pages/My";
 import Nav from "../components/Nav";
 import Login from "../components/Login";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { supabase } from "../supabase/configure";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { loginModalState } from "../recoil/atom/loginModalState";
+import { userState } from "../recoil/atom/userState";
 
 const Routers = () => {
   const loginState = useRecoilValue(loginModalState);
-  const navigate = useNavigate();
   const location = useLocation();
   const showNav = location.pathname !== "/";
+  const setUser = useSetRecoilState(userState);
+
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log(event, session);
+    const data = supabase.auth.onAuthStateChange((event, session) => {
+      switch (event) {
+        case "SIGNED_IN":
+          console.log("로그인!");
+          break;
+        case "SIGNED_OUT":
+          console.log("로그아웃!");
+          break;
+        default:
       }
-    );
+      setUser(session);
+    });
+    return () => {};
   }, []);
+
   return (
     <>
-      {showNav && loginState ? null : <Nav />}
+      {showNav && <Nav />}
       {loginState && <Login />}
       <Routes>
         <Route path="/" element={<Main />} />

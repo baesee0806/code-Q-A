@@ -4,9 +4,21 @@ import { IoHomeSharp } from "react-icons/io5";
 import { FaQuestionCircle } from "react-icons/fa";
 import { TfiWrite } from "react-icons/tfi";
 import { loginModalState } from "../recoil/atom/loginModalState";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { supabase } from "../supabase/configure";
+import { userEmail } from "../recoil/atom/userState";
 function Nav() {
   const loginState = useSetRecoilState(loginModalState);
+  const user = useRecoilValue(userEmail);
+  const isLogin = user ? true : false;
+
+  const logOutHandler = async (e: React.FormEvent) => {
+    try {
+      const { error } = await supabase.auth.signOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Container>
       <NavLogoBox>
@@ -21,13 +33,23 @@ function Nav() {
         <NavItem to="/question/create">
           <TfiWrite />
         </NavItem>
-        <div
-          onClick={() => {
-            loginState(true);
-          }}
-        >
-          로그인
-        </div>
+        {isLogin ? (
+          <div
+            onClick={(e) => {
+              logOutHandler(e);
+            }}
+          >
+            로그아웃
+          </div>
+        ) : (
+          <div
+            onClick={() => {
+              loginState(true);
+            }}
+          >
+            로그인
+          </div>
+        )}
       </NavItemBox>
     </Container>
   );
