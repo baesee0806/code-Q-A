@@ -7,9 +7,17 @@ export const userState = atom<Session | null>({
 });
 
 export const userEmail = selector({
-  key: "userData",
+  key: "userEmail",
   get: ({ get }) => {
     const user = get(userState);
     return user?.user.email;
+  },
+});
+
+export const userId = selector({
+  key: "userId",
+  get: ({ get }) => {
+    const user = get(userState);
+    return user?.user.id;
   },
 });

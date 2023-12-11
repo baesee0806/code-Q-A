@@ -7,6 +7,7 @@ import { loginModalState } from "../recoil/atom/loginModalState";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { supabase } from "../supabase/configure";
 import { userEmail } from "../recoil/atom/userState";
+import { logout_message } from "../apis/message";
 function Nav() {
   const loginState = useSetRecoilState(loginModalState);
   const user = useRecoilValue(userEmail);
@@ -37,6 +38,7 @@ function Nav() {
           <div
             onClick={(e) => {
               logOutHandler(e);
+              logout_message();
             }}
           >
             로그아웃
