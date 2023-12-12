@@ -84,7 +84,7 @@ const Container = styled.main`
 `;
 // 검색
 const SearchContainer = styled.div`
-  height: 30%;
+  height: 20%;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -23,34 +23,28 @@ function Nav() {
   return (
     <Container>
       <NavLogoBox>
-        <NavItem to="/">
-          <IoHomeSharp />
-        </NavItem>
+        <NavItem to="/">HOME</NavItem>
       </NavLogoBox>
       <NavItemBox>
-        <NavItem to="/question">
-          <FaQuestionCircle />
-        </NavItem>
-        <NavItem to="/question/create">
-          <TfiWrite />
-        </NavItem>
+        <NavItem to="/question">QUESTION</NavItem>
+        <NavItem to="/question/create">WRITE</NavItem>
         {isLogin ? (
-          <div
+          <LoginOutButton
             onClick={(e) => {
               logOutHandler(e);
               logout_message();
             }}
           >
-            로그아웃
-          </div>
+            LOGOUT
+          </LoginOutButton>
         ) : (
-          <div
+          <LoginOutButton
             onClick={() => {
               loginState(true);
             }}
           >
-            로그인
-          </div>
+            LOGIN
+          </LoginOutButton>
         )}
       </NavItemBox>
     </Container>
@@ -65,15 +59,14 @@ const Container = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: none;
+  background: inherit;
 `;
 
 const NavLogoBox = styled.div`
   margin-left: 30px;
 `;
 const NavItemBox = styled.div`
-  width: 30%;
-  margin-right: 30px;
+  width: 40%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -84,6 +77,13 @@ const NavItem = styled(Link)`
   color: #000000;
   font-size: 3rem;
   text-decoration: none;
+  margin-right: 30px;
 `;
-
+const LoginOutButton = styled.div`
+  background: none;
+  color: #000000;
+  font-size: 3rem;
+  text-decoration: none;
+  margin-right: 30px;
+`;
 export default Nav;
