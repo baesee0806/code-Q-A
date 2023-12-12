@@ -6,6 +6,7 @@ import TS from "../assets/images/TS.png";
 import HTML from "../assets/images/HTML.png";
 import CSS from "../assets/images/CSS.png";
 import { useNavigate } from "react-router-dom";
+import { useSearchQueryString } from "../hooks/useSearchQueryString";
 // interface Datas {
 //   id: number;
 //   created_at: Date;
@@ -25,6 +26,9 @@ const QuestionAnswer = () => {
     { value: "strawberry", label: "Strawberry" },
     { value: "vanilla", label: "Vanilla" },
   ];
+  const { searchQuery, onInputChange, onSearch } = useSearchQueryString({
+    page: "question",
+  });
   // const user = async () => {
   //   const { data, error } = await supabase.auth.getUser();
   //   console.log(data);
@@ -42,9 +46,9 @@ const QuestionAnswer = () => {
 
   return (
     <Container>
-      <SearchContainer>
+      <SearchContainer onSubmit={(e) => onSearch(e, searchQuery)}>
         <SearchIcon>🔍</SearchIcon>
-        <Search type="text" />
+        <Search type="text" value={searchQuery} onChange={onInputChange} />
       </SearchContainer>
       <OptionSection>
         <OptionContainer>
@@ -98,7 +102,7 @@ const Container = styled.main`
   height: 100vh;
 `;
 // 검색
-const SearchContainer = styled.div`
+const SearchContainer = styled.form`
   height: 20%;
   display: flex;
   justify-content: center;
