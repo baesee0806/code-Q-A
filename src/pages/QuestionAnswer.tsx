@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import { supabase } from "../supabase/configure";
 import Select from "react-select";
+import JS from "../assets/images/JS.png";
+import TS from "../assets/images/TS.png";
+import HTML from "../assets/images/HTML.png";
+import CSS from "../assets/images/CSS.png";
+import { useNavigate } from "react-router-dom";
 // interface Datas {
 //   id: number;
 //   created_at: Date;
@@ -13,6 +18,7 @@ import Select from "react-select";
 // }
 
 const QuestionAnswer = () => {
+  const navigate = useNavigate();
   const data1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const options = [
     { value: "chocolate", label: "Chocolate" },
@@ -62,8 +68,17 @@ const QuestionAnswer = () => {
       <ContentSection>
         {data1.map((item, index) => {
           return (
-            <Card key={index}>
-              <CardImage src="https://picsum.photos/300/300" />
+            <Card
+              key={index}
+              onClick={() => {
+                navigate(`/question/${index}`);
+              }}
+            >
+              <CardImage src={JS} />
+              <CardExplain>
+                content
+                Explanation....ㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴ
+              </CardExplain>
               <CardInfo>
                 <CardTitle>제목</CardTitle>
                 <CardAuthor>작성자</CardAuthor>
@@ -153,6 +168,7 @@ const Card = styled.div`
   width: 300px;
   height: 300px;
   margin: 0 50px 100px 80px;
+  cursor: pointer;
   &:hover ${CardInfo} {
     display: flex;
     justify-content: center;
@@ -164,7 +180,12 @@ const CardImage = styled.img`
   width: 100%;
   height: 100%;
 `;
-
+const CardExplain = styled.div`
+  color: #c1c1c1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 const CardTitle = styled.div`
   width: 100%;
   height: 30%;
