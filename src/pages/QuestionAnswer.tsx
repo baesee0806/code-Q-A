@@ -7,6 +7,13 @@ import HTML from "../assets/images/HTML.png";
 import CSS from "../assets/images/CSS.png";
 import { useNavigate } from "react-router-dom";
 import { useSearchQueryString } from "../hooks/useSearchQueryString";
+import {
+  langeageOptions,
+  sortOptions,
+  checkOptions,
+} from "../apis/selectOption";
+import { useState } from "react";
+import { useOptionState } from "../hooks/useOptionState";
 // interface Datas {
 //   id: number;
 //   created_at: Date;
@@ -21,14 +28,14 @@ import { useSearchQueryString } from "../hooks/useSearchQueryString";
 const QuestionAnswer = () => {
   const navigate = useNavigate();
   const data1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
-  const { searchQuery, onInputChange, onSearch } = useSearchQueryString({
+
+  const { searchQuery, onInputChange, onSearch, q } = useSearchQueryString({
     page: "question",
   });
+
+  const { lang, sort, check, onLangChange, onSortChange, onCheckChange } =
+    useOptionState();
+
   // const user = async () => {
   //   const { data, error } = await supabase.auth.getUser();
   //   console.log(data);
@@ -43,7 +50,6 @@ const QuestionAnswer = () => {
   // useEffect(() => {
   //   d();
   // }, []);
-
   return (
     <Container>
       <SearchContainer onSubmit={(e) => onSearch(e, searchQuery)}>
@@ -53,19 +59,22 @@ const QuestionAnswer = () => {
       <OptionSection>
         <OptionContainer>
           <Selects
-            options={options}
-            defaultValue={options[0]}
+            options={langeageOptions}
+            defaultValue={langeageOptions[0]}
             isSearchable={false}
+            onChange={onLangChange}
           />
           <Selects
-            options={options}
-            defaultValue={options[0]}
+            options={sortOptions}
+            defaultValue={sortOptions[0]}
             isSearchable={false}
+            onChange={onSortChange}
           />
           <Selects
-            options={options}
-            defaultValue={options[0]}
+            options={checkOptions}
+            defaultValue={checkOptions[0]}
             isSearchable={false}
+            onChange={onCheckChange}
           />
         </OptionContainer>
       </OptionSection>
