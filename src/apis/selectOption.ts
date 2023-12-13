@@ -8,9 +8,9 @@ export const langeageOptions = [
 
 export const sortOptions = [
   { value: "", label: "시간순" },
-  { value: "newest", label: "최신순" },
-  { value: "oldest", label: "오래된 순" },
-  { value: "view", label: "조회순" },
+  { value: "Latest", label: "최신순" },
+  { value: "Oldest", label: "오래된 순" },
+  { value: "View", label: "조회순" },
 ];
 
 export const checkOptions = [

@@ -14,6 +14,8 @@ import {
 } from "../apis/selectOption";
 import { useState } from "react";
 import { useOptionState } from "../hooks/useOptionState";
+import { useQuery } from "react-query";
+import { fetchFilteredData } from "../apis/getQuestion";
 // interface Datas {
 //   id: number;
 //   created_at: Date;
@@ -27,7 +29,6 @@ import { useOptionState } from "../hooks/useOptionState";
 
 const QuestionAnswer = () => {
   const navigate = useNavigate();
-  const data1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const { searchQuery, onInputChange, onSearch, q } = useSearchQueryString({
     page: "question",
@@ -35,21 +36,11 @@ const QuestionAnswer = () => {
 
   const { lang, sort, check, onLangChange, onSortChange, onCheckChange } =
     useOptionState();
+  const { data, status } = useQuery(
+    ["filteredData", q, lang, sort, check],
+    () => fetchFilteredData(q, lang, sort, check)
+  );
 
-  // const user = async () => {
-  //   const { data, error } = await supabase.auth.getUser();
-  //   console.log(data);
-  // };
-  // user();
-  // const d = async () => {
-  //   const { data: question, error } = await supabase
-  //     .from("question")
-  //     .select("*");
-  //   console.log(question);
-  // };
-  // useEffect(() => {
-  //   d();
-  // }, []);
   return (
     <Container>
       <SearchContainer onSubmit={(e) => onSearch(e, searchQuery)}>
@@ -79,28 +70,29 @@ const QuestionAnswer = () => {
         </OptionContainer>
       </OptionSection>
       <ContentSection>
-        {data1.map((item, index) => {
-          return (
-            <Card
-              key={index}
-              onClick={() => {
-                navigate(`/question/${index}`);
-              }}
-            >
-              <CardImage src={JS} />
-              <CardExplain>
-                content
-                Explanation....ㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴ
-              </CardExplain>
-              <CardInfo>
-                <CardTitle>제목</CardTitle>
-                <CardAuthor>작성자</CardAuthor>
-                <CardDate>작성일</CardDate>
-                <CardAnswer>답변수</CardAnswer>
-              </CardInfo>
-            </Card>
-          );
-        })}
+        {data &&
+          data.map((item: any, index: number) => {
+            return (
+              <Card
+                key={index}
+                onClick={() => {
+                  navigate(`/question/${index}`);
+                }}
+              >
+                <CardImage src={JS} />
+                <CardExplain>
+                  content
+                  Explanation....ㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴ
+                </CardExplain>
+                <CardInfo>
+                  <CardTitle>제목</CardTitle>
+                  <CardAuthor>작성자</CardAuthor>
+                  <CardDate>작성일</CardDate>
+                  <CardAnswer>답변수</CardAnswer>
+                </CardInfo>
+              </Card>
+            );
+          })}
       </ContentSection>
     </Container>
   );

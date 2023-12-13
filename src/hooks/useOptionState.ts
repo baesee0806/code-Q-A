@@ -4,6 +4,7 @@ type OptionType = {
   label: string;
   value: string;
 };
+
 export const useOptionState = () => {
   const [lang, setLang] = useState<string | null>(null);
   const [sort, setSort] = useState<string | null>(null);
