@@ -13,6 +13,7 @@ interface Database {
           language: string;
           importance: number;
           check: boolean;
+          view: number;
         };
         Insert: {
           id: number;
@@ -23,6 +24,7 @@ interface Database {
           language: string;
           importance: number;
           check: boolean;
+          view: number;
           Update: {
             id?: number;
             created_at?: Date;
@@ -32,6 +34,7 @@ interface Database {
             language?: string;
             importance?: number;
             check?: boolean;
+            view?: number;
           };
         };
       };

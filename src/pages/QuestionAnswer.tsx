@@ -6,88 +6,97 @@ import TS from "../assets/images/TS.png";
 import HTML from "../assets/images/HTML.png";
 import CSS from "../assets/images/CSS.png";
 import { useNavigate } from "react-router-dom";
-// interface Datas {
-//   id: number;
-//   created_at: Date;
-//   user_id: string;
-//   title: string;
-//   content: string;
-//   language: string;
-//   importance: number;
-//   check: boolean;
-// }
+import { useSearchQueryString } from "../hooks/useSearchQueryString";
+import {
+  langeageOptions,
+  sortOptions,
+  checkOptions,
+} from "../apis/selectOption";
+import { useState } from "react";
+import { useOptionState } from "../hooks/useOptionState";
+import { useQuery } from "react-query";
+import { fetchFilteredData } from "../apis/getQuestion";
+import Modal from "../components/Modal";
+interface Datas {
+  id: number;
+  created_at: Date;
+  user_id: string;
+  title: string;
+  content: string;
+  language: string;
+  importance: number;
+  check: boolean;
+  view: number;
+}
 
 const QuestionAnswer = () => {
   const navigate = useNavigate();
-  const data1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
-  // const user = async () => {
-  //   const { data, error } = await supabase.auth.getUser();
-  //   console.log(data);
-  // };
-  // user();
-  // const d = async () => {
-  //   const { data: question, error } = await supabase
-  //     .from("question")
-  //     .select("*");
-  //   console.log(question);
-  // };
-  // useEffect(() => {
-  //   d();
-  // }, []);
 
+  const { searchQuery, onInputChange, onSearch, q } = useSearchQueryString({
+    page: "question",
+  });
+
+  const { lang, sort, check, onLangChange, onSortChange, onCheckChange } =
+    useOptionState();
+
+  const { data, status } = useQuery(
+    ["filteredData", q, lang, sort, check],
+    () => fetchFilteredData(q, lang, sort, check),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  if (status === "error") return <div>error...</div>;
   return (
     <Container>
-      <SearchContainer>
+      <SearchContainer onSubmit={(e) => onSearch(e, searchQuery)}>
         <SearchIcon>🔍</SearchIcon>
-        <Search type="text" />
+        <Search type="text" value={searchQuery} onChange={onInputChange} />
       </SearchContainer>
       <OptionSection>
         <OptionContainer>
           <Selects
-            options={options}
-            defaultValue={options[0]}
+            options={langeageOptions}
+            defaultValue={langeageOptions[0]}
             isSearchable={false}
+            onChange={onLangChange}
           />
           <Selects
-            options={options}
-            defaultValue={options[0]}
+            options={sortOptions}
+            defaultValue={sortOptions[0]}
             isSearchable={false}
+            onChange={onSortChange}
           />
           <Selects
-            options={options}
-            defaultValue={options[0]}
+            options={checkOptions}
+            defaultValue={checkOptions[0]}
             isSearchable={false}
+            onChange={onCheckChange}
           />
         </OptionContainer>
       </OptionSection>
       <ContentSection>
-        {data1.map((item, index) => {
-          return (
-            <Card
-              key={index}
-              onClick={() => {
-                navigate(`/question/${index}`);
-              }}
-            >
-              <CardImage src={JS} />
-              <CardExplain>
-                content
-                Explanation....ㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴ
-              </CardExplain>
-              <CardInfo>
-                <CardTitle>제목</CardTitle>
-                <CardAuthor>작성자</CardAuthor>
-                <CardDate>작성일</CardDate>
-                <CardAnswer>답변수</CardAnswer>
-              </CardInfo>
-            </Card>
-          );
-        })}
+        {data &&
+          data.map((item: Datas, index: number) => {
+            return (
+              <Card
+                key={index}
+                onClick={() => {
+                  navigate(`/question/${index}`);
+                }}
+              >
+                <CardImage src={JS} />
+                <CardExplain>{item.content}</CardExplain>
+                <CardInfo>
+                  <CardTitle>{item.title}</CardTitle>
+                  <CardAuthor>{item.user_id}</CardAuthor>
+                  <CardDate>23.12.13</CardDate>
+                  <CardAnswer>{item.view}</CardAnswer>
+                </CardInfo>
+              </Card>
+            );
+          })}
       </ContentSection>
     </Container>
   );
@@ -98,7 +107,7 @@ const Container = styled.main`
   height: 100vh;
 `;
 // 검색
-const SearchContainer = styled.div`
+const SearchContainer = styled.form`
   height: 20%;
   display: flex;
   justify-content: center;
