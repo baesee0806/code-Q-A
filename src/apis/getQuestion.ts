@@ -22,11 +22,13 @@ export const fetchFilteredData = async (
 
   if (sort === "Latest") {
     query = query.order("created_at", { ascending: false });
-  } else if (sort === "Oldest") {
+  }
+  if (sort === "Oldest") {
     query = query.order("created_at", { ascending: true });
   }
-  // else if(sort==='View'){
-  //   query = query.order("view", { ascending: sort === "View" });
+  if (sort === "View") {
+    query = query.order("view", { ascending: false });
+  }
 
   let { data, error } = await query;
 
@@ -35,34 +37,6 @@ export const fetchFilteredData = async (
   }
 
   return data;
-};
-
-// 최신순
-export const fetchLatestData = async () => {
-  const { data: question, error } = await supabase
-    .from("question")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  return { question, error };
-};
-// 오래된 순
-export const fetchOldestData = async () => {
-  const { data: question, error } = await supabase
-    .from("question")
-    .select("*")
-    .order("created_at", { ascending: true });
-
-  return { question, error };
-};
-// 조회순
-export const fetchViewData = async () => {
-  const { data: question, error } = await supabase
-    .from("question")
-    .select("*")
-    .order("view", { ascending: false });
-
-  return { question, error };
 };
 
 // const user = async () => {

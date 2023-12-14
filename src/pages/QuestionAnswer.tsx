@@ -16,16 +16,18 @@ import { useState } from "react";
 import { useOptionState } from "../hooks/useOptionState";
 import { useQuery } from "react-query";
 import { fetchFilteredData } from "../apis/getQuestion";
-// interface Datas {
-//   id: number;
-//   created_at: Date;
-//   user_id: string;
-//   title: string;
-//   content: string;
-//   language: string;
-//   importance: number;
-//   check: boolean;
-// }
+import Modal from "../components/Modal";
+interface Datas {
+  id: number;
+  created_at: Date;
+  user_id: string;
+  title: string;
+  content: string;
+  language: string;
+  importance: number;
+  check: boolean;
+  view: number;
+}
 
 const QuestionAnswer = () => {
   const navigate = useNavigate();
@@ -36,11 +38,16 @@ const QuestionAnswer = () => {
 
   const { lang, sort, check, onLangChange, onSortChange, onCheckChange } =
     useOptionState();
+
   const { data, status } = useQuery(
     ["filteredData", q, lang, sort, check],
-    () => fetchFilteredData(q, lang, sort, check)
+    () => fetchFilteredData(q, lang, sort, check),
+    {
+      refetchOnWindowFocus: false,
+    }
   );
 
+  if (status === "error") return <div>error...</div>;
   return (
     <Container>
       <SearchContainer onSubmit={(e) => onSearch(e, searchQuery)}>
@@ -71,7 +78,7 @@ const QuestionAnswer = () => {
       </OptionSection>
       <ContentSection>
         {data &&
-          data.map((item: any, index: number) => {
+          data.map((item: Datas, index: number) => {
             return (
               <Card
                 key={index}
@@ -80,15 +87,12 @@ const QuestionAnswer = () => {
                 }}
               >
                 <CardImage src={JS} />
-                <CardExplain>
-                  content
-                  Explanation....ㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴ
-                </CardExplain>
+                <CardExplain>{item.content}</CardExplain>
                 <CardInfo>
-                  <CardTitle>제목</CardTitle>
-                  <CardAuthor>작성자</CardAuthor>
-                  <CardDate>작성일</CardDate>
-                  <CardAnswer>답변수</CardAnswer>
+                  <CardTitle>{item.title}</CardTitle>
+                  <CardAuthor>{item.user_id}</CardAuthor>
+                  <CardDate>23.12.13</CardDate>
+                  <CardAnswer>{item.view}</CardAnswer>
                 </CardInfo>
               </Card>
             );
