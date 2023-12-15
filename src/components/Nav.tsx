@@ -15,7 +15,8 @@ function Nav() {
 
   const logOutHandler = async (e: React.FormEvent) => {
     try {
-      const { error } = await supabase.auth.signOut();
+      await supabase.auth.signOut();
+      localStorage.removeItem("id");
     } catch (error) {
       console.log(error);
     }

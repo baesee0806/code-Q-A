@@ -1,14 +1,23 @@
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
+import { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
-function ToastEditor() {
+
+interface ToastEditorProps {
+  editorRef: React.MutableRefObject<Editor | null>;
+  onChange: () => void;
+}
+
+function ToastEditor({ editorRef, onChange }: ToastEditorProps) {
   return (
     <EditorContainer>
       <Editor
         previewStyle="vertical"
         height="600px"
         initialEditType="markdown"
-        initialValue="hello"
+        initialValue="질문을 입력해주세요."
+        ref={editorRef}
+        onChange={onChange}
       />
     </EditorContainer>
   );

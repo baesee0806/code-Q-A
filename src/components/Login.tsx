@@ -24,27 +24,7 @@ function Login() {
     },
     []
   );
-  //   const signHandler = async () => {
-  //     try {
-  //       const { data, error } = await supabase.auth.signUp({
-  //         email: email,
-  //         password: password,
-  //         options: {
-  //           data: {
-  //             first_name: "bae",
-  //             age: 28,
-  //           },
-  //         },
-  //       });
-  //       console.log(data);
 
-  //       if (error) {
-  //         throw error;
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
   const loginHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -56,6 +36,7 @@ function Login() {
         throw error;
       }
       if (data) {
+        localStorage.setItem("id", data.user.id);
         setEmail("");
         setPassword("");
         loginState(false);
