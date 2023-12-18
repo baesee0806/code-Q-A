@@ -1,6 +1,5 @@
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
-import { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 
 interface ToastEditorProps {
