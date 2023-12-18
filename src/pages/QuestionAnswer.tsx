@@ -12,11 +12,11 @@ import {
   sortOptions,
   checkOptions,
 } from "../apis/selectOption";
-import { useState } from "react";
 import { useOptionState } from "../hooks/useOptionState";
 import { useQuery } from "react-query";
 import { fetchFilteredData } from "../apis/getQuestion";
-import Modal from "../components/Modal";
+import { stackImg } from "../apis/stackImg";
+import { getDate } from "../apis/getDate";
 interface Datas {
   id: number;
   created_at: Date;
@@ -86,12 +86,12 @@ const QuestionAnswer = () => {
                   navigate(`/question/${index}`);
                 }}
               >
-                <CardImage src={JS} />
+                <CardImage src={stackImg(item.language)} />
                 <CardExplain>{item.content}</CardExplain>
                 <CardInfo>
                   <CardTitle>{item.title}</CardTitle>
                   <CardAuthor>{item.user_id}</CardAuthor>
-                  <CardDate>23.12.13</CardDate>
+                  <CardDate>{getDate(item.created_at)}</CardDate>
                   <CardAnswer>{item.view}</CardAnswer>
                 </CardInfo>
               </Card>

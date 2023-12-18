@@ -1,29 +1,99 @@
 import styled from "styled-components";
 import ToastEditor from "../components/ToastEditor";
 import Select from "react-select";
-const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
-];
+import { stackOptions, importOptions } from "../apis/selectOption";
+import { useOptionState } from "../hooks/useOptionState";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Editor } from "@toast-ui/react-editor";
+import { useQueryClient, useMutation } from "react-query";
+import { postQuestion } from "../apis/postQuestion";
+import { useNavigate } from "react-router-dom";
 const QuestionCreate = () => {
+  const navigate = useNavigate();
+  const [title, setTitle] = useState<string>("");
+
+  const onChangeTitle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      setTitle(e.target.value);
+    },
+    []
+  );
+
+  const { stack, importance, onStackChange, onImportanceChange } =
+    useOptionState();
+
+  const [content, setContent] = useState<string>("");
+  const editorRef = useRef<Editor | null>(null);
+
+  const onChange = useCallback(() => {
+    const data = editorRef.current?.getInstance().getMarkdown();
+    if (data !== undefined) {
+      setContent(data);
+    }
+  }, []);
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation(postQuestion, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("filteredData");
+      navigate("/question");
+    },
+  });
+  const handleSubmit = () => {
+    mutation.mutate({ title, content, stack, importance });
+  };
+
+  const initData = useCallback(() => {
+    setTitle("");
+    editorRef.current?.getInstance().setMarkdown("");
+  }, []);
+
+  // 뒤로가기, 새로고침 방지
+  const preventClose = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = ""; //Chrome에서 동작하도록; deprecated
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", preventClose);
+    return () => {
+      window.removeEventListener("beforeunload", preventClose);
+    };
+  }, []);
+
   return (
     <Container>
-      <Title type="text" placeholder="Title" />
+      <Title
+        type="text"
+        placeholder="Title"
+        value={title}
+        onChange={onChangeTitle}
+      />
       <SelectContainer>
         <SelectBox>
           <SelectTitle htmlFor="stack">스택</SelectTitle>
-          <Selects options={options} />
+          <Selects
+            options={stackOptions}
+            defaultValue={stackOptions[0]}
+            isSearchable={false}
+            onChange={onStackChange}
+          />
         </SelectBox>
         <SelectBox>
           <SelectTitle htmlFor="importance">중요도</SelectTitle>
-          <Selects options={options} />
+          <Selects
+            options={importOptions}
+            defaultValue={importOptions[0]}
+            isSearchable={false}
+            onChange={onImportanceChange}
+          />
         </SelectBox>
       </SelectContainer>
-      <ToastEditor />
+      <ToastEditor editorRef={editorRef} onChange={onChange} />
       <ButtonBox>
-        <Btn>질문하기</Btn>
-        <Btn>초기화</Btn>
+        <Btn onClick={handleSubmit}>질문하기</Btn>
+        <Btn onClick={initData}>초기화</Btn>
       </ButtonBox>
     </Container>
   );
