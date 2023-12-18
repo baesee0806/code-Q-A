@@ -3,7 +3,7 @@ import ToastEditor from "../components/ToastEditor";
 import Select from "react-select";
 import { stackOptions, importOptions } from "../apis/selectOption";
 import { useOptionState } from "../hooks/useOptionState";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Editor } from "@toast-ui/react-editor";
 import { useQueryClient, useMutation } from "react-query";
 import { postQuestion } from "../apis/postQuestion";
@@ -48,6 +48,20 @@ const QuestionCreate = () => {
     setTitle("");
     editorRef.current?.getInstance().setMarkdown("");
   }, []);
+
+  // 뒤로가기, 새로고침 방지
+  const preventClose = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = ""; //Chrome에서 동작하도록; deprecated
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", preventClose);
+    return () => {
+      window.removeEventListener("beforeunload", preventClose);
+    };
+  }, []);
+
   return (
     <Container>
       <Title
