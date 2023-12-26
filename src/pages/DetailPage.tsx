@@ -2,27 +2,50 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Viewer } from "@toast-ui/react-editor";
-
+import { useQuery } from "react-query";
+import { detailData } from "../apis/getQuestion";
+import { getDate } from "../apis/getDate";
+interface Datas {
+  id: number;
+  created_at: Date;
+  user_id: string;
+  title: string;
+  content: string;
+  language: string;
+  importance: number;
+  check: boolean;
+  view: number;
+}
 function DetailPage() {
   const { docId } = useParams();
-  const markdown =
-    '# This is a H1\n## This is a H2\n[Link to google](https://google.com)\n\n![image](https://user-images.githubusercontent.com/52653793/126897516-9b9b9b7a-5b9a-4b0a-9b0a-9b0b9b0b9b0b.png)\n\n> This is a blockquote\n\n- list\n- list\n- list\n\n```js\nconsole.log("hello world");\n```\n\n**This is a bold text**\n\n*This is a italic text*';
+
+  const { data, status } = useQuery(
+    ["detailData", docId as string],
+    () => detailData(docId as string),
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  if (status === "error") return <div>error...</div>;
 
   return (
     <Container>
-      <Title>Title</Title>
-      <Line />
-      <InfoBox>
-        <User>작성자</User>
-        <Dot>·</Dot>
-        <CreatedAt>작성일</CreatedAt>
-        <Dot>·</Dot>
-        <IsCheck>채택 상태</IsCheck>
-      </InfoBox>
-      <ViewerBox>
-        <Viewer initialValue={markdown} />
-      </ViewerBox>
-      <Line />
+      {data &&
+        data.map((item: Datas) => (
+          <div key={item.id}>
+            <Title>{item.title}</Title>
+            <Line />
+            <InfoBox>
+              <User>작성자 : {item.user_id}</User>
+              <CreatedAt>작성일 : {getDate(item.created_at)}</CreatedAt>
+              <IsCheck>{item.check ? "채택 완료" : "채택 전"}</IsCheck>
+            </InfoBox>
+            <ViewerBox>
+              <Viewer initialValue={item.content} />
+            </ViewerBox>
+          </div>
+        ))}
 
       <CommentBox>
         <h2>##개의 댓글</h2>
@@ -40,7 +63,7 @@ function DetailPage() {
           </CommentBtnBox>
         </CommentInfoWrap>
         <Content>
-          <Viewer initialValue={markdown} />
+          <Viewer initialValue={`1`} />
         </Content>
       </CommentBox>
     </Container>
@@ -79,20 +102,22 @@ const InfoBox = styled.div`
   align-items: center;
 `;
 const User = styled.div`
-  width: 100px;
   height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 const CreatedAt = styled.div`
-  width: 100px;
   height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1rem;
+  margin-left: 20px;
 `;
 const Dot = styled.div`
   font-size: 2rem;

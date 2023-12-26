@@ -83,7 +83,7 @@ const QuestionAnswer = () => {
               <Card
                 key={index}
                 onClick={() => {
-                  navigate(`/question/${index}`);
+                  navigate(`/question/${item.id}`);
                 }}
               >
                 <CardImage src={stackImg(item.language)} />

@@ -43,3 +43,16 @@ export const fetchFilteredData = async (
 //   const { data, error } = await supabase.auth.getUser();
 //   console.log(data);
 // };
+
+export const detailData = async (id: string) => {
+  const { data, error } = await supabase
+    .from("question")
+    .select("*")
+    .eq("id", id);
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
